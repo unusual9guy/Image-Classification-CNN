@@ -159,14 +159,11 @@ streamlit  run  ensemble_classifier.py
 # Usage
 
   
-
-1. Launch the Streamlit interface.
-
-2. Upload an image (32x32 RGB).
-
-3. Click "Make Prediction."
-
-4. View the classification result.
+1. Download the three models first in the directory of your notebook
+2. Launch the Streamlit interface.
+3. Upload an image (32x32 RGB).
+4. Click "Make Prediction."
+5. View the classification result.
 
   
 

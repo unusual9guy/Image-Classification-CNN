@@ -181,7 +181,7 @@ The ensemble model achieves improved accuracy compared to individual models:
 
 -  **Model 3**: ~89% accuracy
 
--  **Ensemble (Majority Voting)**: ~90% accuracy
+-  **Ensemble (Majority Voting)**: ~87% accuracy
 
   
 

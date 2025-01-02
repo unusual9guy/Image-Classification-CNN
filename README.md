@@ -22,17 +22,16 @@ The project consists of:
 
 ### 1. CNN Model 1 (Base Model) 📊
 * Foundational CNN architecture:
-  * 4 convolutional layers with increasing filters
+  * 3 convolutional layers with increasing filters
   * MaxPooling after each conv layer
-  * Dropout (0.25) for regularization
-  * Dense layers: 512 → 10 (output)
+  * Gradually increasing Dropout (0.25 → 0.5) for regularization
+  * Dense layers: 512 → 256 → 10 (output)
 
 ### 2. CNN Model 2 (Enhanced) 🚀
 * Sophisticated architecture:
-  * Batch normalization after each conv layer
-  * 6 convolutional blocks
-  * L2 regularization (lambda=0.01)
-  * Advanced dropout patterns (0.3, 0.4)
+  * 4 convolutional blocks
+  * Additional filters: 256 in the last convolution blocks
+  * Additional neurons for a more complicated fully-connected layer : 1024 → 512 → 10 (output)
 
 ### 3. CNN Model 3 (ResNet-Inspired) ⭐
 * State-of-the-art features:

@@ -45,12 +45,12 @@ The project consists of:
 
 ### Data Preparation 📥
 * Dataset: CIFAR-10 (60,000 32x32 color images)
-  * 50,000 training images
+  * 40,000 training images
+  * 10,000 validation images
   * 10,000 testing images
 * Classes: 10 (airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck)
 * Preprocessing:
   * Normalization: [0,1] range
-  * Train/Val/Test split: 80/10/10
 
 ### Data Augmentation 🔄
 ```python

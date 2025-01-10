@@ -116,7 +116,7 @@ Model Performance Comparison:
 ## Requirements 📋
 
 * Python 3.7+
-* TensorFlow 2.x
+* TensorFlow 2.17.1
 * Streamlit
 * NumPy
 * OpenCV

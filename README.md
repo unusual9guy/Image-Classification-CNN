@@ -72,11 +72,6 @@ augmentation = ImageDataGenerator(
 
 ## Running the Interface 🖥️
 
-### Local Deployment 🏠
-```bash
-streamlit run ensemble_classifier.py
-```
-
 ### Google Colab Deployment ☁️
 ```python
 !pip install streamlit

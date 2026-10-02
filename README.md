@@ -1,125 +1,70 @@
-# CIFAR-10 Image Classification with CNN Ensemble 🖼️🤖
+# Image-Classification-CNN
 
-This project implements an advanced image classification system using Convolutional Neural Networks (CNNs) on the CIFAR-10 dataset. By combining three distinct CNN architectures through ensemble methods, we achieve robust and accurate image classification results. 🎯
+Three convolutional neural networks (CNNs) trained on CIFAR-10, with the best single model reaching 89% test accuracy and an ensemble of all three reaching 87.9%.
 
-## Overview 📋
+CIFAR-10 is a standard dataset of 60,000 small colour images (32 by 32 pixels) in 10 classes: airplane, automobile, bird, cat, deer, dog, frog, horse, ship and truck. A CNN is a neural network that learns image filters. An ensemble combines the predictions of several models.
 
-The project consists of:
-- 🧠 Three CNN models with different architectures
-- 🔄 Advanced data augmentation techniques
-- 🤝 Ensemble methods (Simple Averaging and Majority Voting)
-- 🌐 A Streamlit web interface for real-time predictions
+## Problem and approach
 
-### Project Components 📦
-```
-├── CNN_model_1.h5       # Basic CNN architecture
-├── CNN_model_2.h5       # Enhanced CNN with batch normalization
-├── CNN_model_3.h5       # ResNet-inspired architecture
-└── ensemble_classifier.py # Streamlit interface
-```
+The notebooks train models in steps, from a plain dense network up to a ResNet-inspired CNN (a network with skip connections), compare them on the same held-out test set, and then test whether combining the three best models helps.
 
-## Model Architectures 🏗️
+1. The data is split into 40,000 training, 10,000 validation and 10,000 test images, with pixel values scaled to 0 to 1.
+2. Training uses data augmentation: random rotations, shifts, flips, zoom and shear.
+3. Model 1 is a base CNN with three convolution layers and dropout. Model 2 adds more convolution blocks and a larger dense head. Model 3 is the ResNet-inspired model with residual connections.
+4. The ensemble either averages the three models' probabilities or takes a majority vote of their predicted classes.
 
-### 1. CNN Model 1 (Base Model) 📊
-* Foundational CNN architecture:
-  * 3 convolutional layers with increasing filters
-  * MaxPooling after each conv layer
-  * Gradually increasing Dropout (0.25 → 0.5) for regularization
-  * Dense layers: 512 → 256 → 10 (output)
+## Architecture
 
-### 2. CNN Model 2 (Enhanced) 🚀
-* Sophisticated architecture:
-  * 4 convolutional blocks
-  * Additional filters: 256 in the last convolution blocks
-  * Additional neurons for a more complicated fully-connected layer : 1024 → 512 → 10 (output)
-
-### 3. CNN Model 3 (ResNet-Inspired) ⭐
-* State-of-the-art features:
-  * Residual connections (skip connections)
-  * Identity mappings
-  * Deep supervision
-  * Bottleneck layers
-
-## Training Pipeline 🛠️
-
-### Data Preparation 📥
-* Dataset: CIFAR-10 (60,000 32x32 color images)
-  * 40,000 training images
-  * 10,000 validation images
-  * 10,000 testing images
-* Classes: 10 (airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck)
-* Preprocessing:
-  * Normalization: [0,1] range
-
-### Data Augmentation 🔄
-```python
-augmentation = ImageDataGenerator(
-    rotation_range=15,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    horizontal_flip=True,
-    zoom_range=0.1,
-    shear_range=0.1
-)
+```mermaid
+flowchart LR
+  A[CIFAR-10 images] --> B[Scale and augment]
+  B --> C[CNN 1<br/>base]
+  B --> D[CNN 2<br/>enhanced]
+  B --> E[CNN 3<br/>ResNet-inspired]
+  C --> F{Ensemble<br/>average or majority vote}
+  D --> F
+  E --> F
+  F --> G[Predicted class]
 ```
 
-### Training Configuration ⚙️
-* Batch size: 32
-* Epochs: 100 (with early stopping)
-* Optimizer: Adam (lr=0.001)
-* Loss: Categorical Crossentropy
-* Metrics: Accuracy, Top-5 Accuracy
+## Results
 
-## Running the Interface 🖥️
+All numbers are accuracy on the 10,000-image CIFAR-10 test set, taken from the classification reports and ensemble cells in `Notebooks/CNN_Image_Classification_Final_Draft.ipynb`.
 
-### Google Colab Deployment ☁️
-```python
-!pip install streamlit
-!streamlit run ensemble_classifier.py & npx localtunnel --port 8501
+| Model | Test accuracy |
+|---|---|
+| Dense network (baseline) | 47% |
+| First plain CNN | 69% |
+| CNN 1 (base) | 84% |
+| CNN 2 (enhanced) | 86% |
+| CNN 3 (ResNet-inspired) | 89% |
+| Ensemble, averaged probabilities | 87.9% |
+| Ensemble, majority vote | 87.4% |
+
+The ensemble did not beat the best single model. CNN 3 alone scored higher than either way of combining the three. I kept this result in because it is what the notebook shows.
+
+## Run it
+
+The work is in the notebooks, and they were written for Google Colab (they import `google.colab`). Paths that point to Google Drive need editing to run locally.
+
+```powershell
+git clone https://github.com/unusual9guy/Image-Classification-CNN.git
+cd Image-Classification-CNN
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+jupyter notebook Notebooks/CNN_Image_Classification_Final_Draft.ipynb
 ```
 
-## Usage Guide 📱
+The trained models are in `Models/` as `.h5` files. The project reads no environment variables.
 
-1. 📥 Download the pre-trained models
-2. 🚀 Launch Streamlit interface
-3. 🖼️ Upload a 32x32 RGB image
-4. 🔍 Click "Make Prediction"
-5. 📊 View detailed classification results
+## Limitations and next steps
 
-## Performance Metrics 📈
+- The old README described a Streamlit app, `ensemble_classifier.py`, that is not in this repo. TODO: add it or remove the claim for good.
+- The three `.h5` weight files (about 120 MB) are committed, so the repo is large to clone. Releases or Git LFS would suit them better.
+- I compared models on the test set. A cleaner setup would pick models on validation data and touch the test set once.
+- Accuracy is the only metric reported. Per-class results and a confusion matrix would show which classes the models confuse.
 
-Model Performance Comparison:
-```
-┌────────────────────────┬────────────┐
-│ Model                  │ Accuracy   │
-├────────────────────────┼────────────┤
-│ CNN Model 1 (Base)     │    84%     │
-│ CNN Model 2 (Enhanced) │    86%     │
-│ CNN Model 3 (ResNet)   │    89%     │
-│ Ensemble (Majority)    │    87%     │
-└────────────────────────┴────────────┘
-```
+## Screenshot
 
-## Future Improvements 🔮
-
-* 🔧 Implement more advanced ensemble techniques
-* 🎯 Add model interpretability features
-* 🚀 Optimize for mobile deployment
-* 📊 Add confusion matrix visualization
-* 🔄 Real-time data augmentation
-
-## Requirements 📋
-
-* Python 3.7+
-* TensorFlow 2.17.1
-* Streamlit
-* NumPy
-* OpenCV
-* Pillow
-
-## License 📄
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-Made with ❤️ for the Computer Vision community
+TODO: add a plot of training curves or a confusion matrix from the notebook.
